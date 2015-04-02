@@ -1,4 +1,4 @@
-module TOC
+class TOC
   MAJOR  = 0
   MINOR  = 1
   PATCH  = 0

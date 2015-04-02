@@ -1,0 +1,10 @@
+// This line doesn't get counted
+
+    /* Neither does this one 
+
+This counts 
+
+     or this one */
+
+     But this one // does
+     And so does /* this */ one

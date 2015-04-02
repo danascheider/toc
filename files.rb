@@ -1,4 +1,4 @@
-module TOC
+class TOC
   def self.files
     Files::FILES
   end
