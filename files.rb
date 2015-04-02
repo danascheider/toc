@@ -4,7 +4,7 @@ module TOC
   end
 
   module Files
-    LIB_FILES  = Dir.glob('./lib/**/*.rb').sort
+    LIB_FILES  = Dir.glob('./lib/*.rb').sort
     SPEC_FILES = Dir.glob('./spec/**/*.rb').sort
     BASE_FILES = %w(files.rb Gemfile LICENSE toc.gemspec README.md version.rb)
 

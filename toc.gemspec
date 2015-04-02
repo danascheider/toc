@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
   s.homepage              = 'https://github.com/danascheider/toc'
 
   s.files                 = TOC.files
-  s.require_paths         = 'lib'
+  s.require_paths         = ['lib']
   s.test_files            =  s.files.select {|path| path =~ /^spec\/.*\.rb/ }
   s.extra_rdoc_files      = %w(README.md LICENSE)
 
