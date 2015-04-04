@@ -1,4 +1,4 @@
-# The table of contents reads a JavaScript file looking for markers
+# The TOC reads a JavaScript file looking for markers
 # demarcating key sections of the code that should be listed in the
 # table of contents. It takes a string as input.
 
@@ -9,12 +9,16 @@ class TOC
     @filename = filename
   end
 
-  def self.add_table
+  def add_table
+    #
+  end
+
+  def create_table
     #
   end
 
   def no_content? (line)
-    false if /^\s*(\/\/|\/\*|(.*)\*\/)?/ =~ line
+    true if /^\s*(\/\/|\/\*|(.*)\*\/)?/ =~ line
   end
 
   def first_after(lineno)

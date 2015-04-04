@@ -24,6 +24,13 @@ describe 'TOC' do
     end
   end
 
+  describe 'no_content? method' do 
+    it 'returns true for a line consisting of whitespace' do
+      line = '      '
+      expect(@toc.no_content? line).to be true
+    end
+  end
+
   # it 'adds a table of contents' do 
   #   expect(TOC.add_table).to eq(@output)
   # end
