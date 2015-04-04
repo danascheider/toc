@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'TOC' do 
+describe 'TOC::Generator' do 
   before(:each) do 
     @generator = TOC::Generator.new(File.expand_path('../support/example1.js', __FILE__))
     @output    = File.read(File.expand_path('../support/example1-after.js', __FILE__ ))
@@ -16,7 +16,7 @@ describe 'TOC' do
     end
 
     it 'returns the table' do 
-      expect(@generator.create_table).to eq @table
+      expect(@generator.create_table).to eql @table
     end
   end
 

@@ -1,3 +1,5 @@
+require File.expand_path('../formatter.rb', __FILE__)
+
 # The TOC Generator reads a JavaScript file looking for markers
 # demarcating key sections of the code that should be listed in the
 # table of contents. It takes a string as input.
@@ -7,7 +9,8 @@ module TOC
     attr_accessor :filename
 
     def initialize(filename)
-      @filename = filename
+      @filename  = filename
+      @formatter = TOC::Formatter.new;
     end
 
     def add_table
@@ -15,7 +18,16 @@ module TOC
     end
 
     def create_table
-      #
+      sections = get_sections
+      offset   = 6 + sections.length
+
+      sections.map! do |section|
+        section[1] += offset
+        @formatter.create_line section[0], section[1].to_s
+      end
+
+      sections = sections.join("\n")
+      content = @formatter.wrap_content sections
     end
 
     def no_content? (line)
