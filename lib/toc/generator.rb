@@ -1,3 +1,4 @@
+require 'fileutils'
 require File.expand_path('../formatter.rb', __FILE__)
 
 # The TOC Generator reads a JavaScript file looking for markers
