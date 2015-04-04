@@ -1,0 +1,22 @@
+#!/usr/bin/env ruby
+
+require 'gli'
+require 'toc'
+require 'colorize'
+
+include GLI::App
+
+program_desc 'Command-line tool adds tables of contents to JavaScript files'
+
+version TOC::Version
+
+desc 'Add a table of contents to the beginning of a file'
+arg_name 'filename'
+command :add do |c|
+  c.action do |global_options, options, args|
+    args.each do |filename|
+      generator = TOC::Generator.new(filename)
+      Generator.prepend_table
+    end
+  end
+end

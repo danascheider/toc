@@ -13,10 +13,6 @@ module TOC
       @formatter = TOC::Formatter.new;
     end
 
-    def add_table
-      #
-    end
-
     def create_table
       sections = get_sections
       offset   = 6 + sections.length
@@ -28,6 +24,21 @@ module TOC
 
       sections = sections.join("\n")
       content = @formatter.wrap_content sections
+    end
+
+    def prepend_table
+      table = create_table
+
+      var new_file_name = @filename + '.tmp'
+      File.open(new_file_name, 'w+') do |file|
+        file.puts table
+
+        File.readlines(@filename) do |line|
+          file.puts line
+        end
+      end
+
+      FileUtils.mv(new_filename, @filename)
     end
 
     def no_content? (line)

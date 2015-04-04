@@ -20,6 +20,9 @@ Gem::Specification.new do |s|
   s.test_files            =  s.files.select {|path| path =~ /^spec\/.*\.rb/ }
   s.extra_rdoc_files      = %w(README.md LICENSE)
 
+  s.add_dependency 'gli', '~> 2.13'
+  s.add_dependency 'colorize', '~> 0.7', '>=0.7.5'
+
   s.add_development_dependency 'rspec', '~> 3.2'
   s.add_development_dependency 'bundler', '~> 1.7', '>=  1.7.3'
   s.add_development_dependency 'coveralls', '~> 0.7', '>= 0.7.2'
