@@ -18,7 +18,29 @@ class TOC
   end
 
   def no_content? (line)
-    true if /^\s*(\/\/|\/\*|(.*)\*\/)?/ =~ line
+
+    # There is still one edge case we need to deal with: that of a multi-line comment
+    # that only has the /* */ at the beginning and end. In such a case, there could be
+    # one or more full lines of comment that have no such indicators. For now I will 
+    # treat that as an edge case.
+
+    # match lines starting with //
+    slash_matcher          = /^\s*(\/\/)/
+
+    # match lines starting with /* and not containing a */ elsewhere in the line
+    multi_line_matcher     = /^\s*((\/)?\*)(.*)[^(\*\/)]$/
+
+    # match lines consisting of only the end of a /* */ comment 
+    multi_line_end_matcher = /^(.*)\*\/(\s*)$/
+
+    # match lines that consist of white space only
+    space_matcher          = /^\s*$/
+
+    [slash_matcher, multi_line_matcher, multi_line_end_matcher, space_matcher].each do |regex|
+      return true if line =~ regex
+    end
+
+    return false
   end
 
   def first_after(lineno)
