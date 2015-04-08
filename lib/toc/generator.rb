@@ -29,29 +29,19 @@ module TOC
       @toc       = TOC::TableOfContents.new(filename);
     end
 
-    def create_table
-      sections = @toc.get_sections
-      offset   = 6 + sections.length
-
-      sections.map! do |section|
-        section[1] += offset
-        @toc.create_line section[0], section[1].to_s
-      end
-
-      sections = sections.join("\n")
-      content = @toc.wrap_content sections
+    def prepare_file
     end
 
     def prepend_table
-      table = create_table
+      table = @toc.generate
+      prepare_file
 
-      var new_file_name = @filename + '.tmp'
-      File.open(new_file_name, 'w+') do |file|
+      new_filename = @filename + '.tmp'
+      File.open(new_filename, 'w+') do |file|
         file.puts table
 
-        File.readlines(@filename) do |line|
-          file.puts line
-        end
+        orig = File.readlines(@filename).join
+        file.puts orig
       end
 
       FileUtils.mv(new_filename, @filename)

@@ -6,18 +6,12 @@ describe TOC::TableOfContents do
     @output = File.read(File.expand_path('../support/example1-after.js', __FILE__))
   end
 
-  describe 'get_sections' do 
-    it 'identifies sections' do 
-      expect(@toc.get_sections).to eq([['Core Properties', 10], ['Special Properties', 16]])
-    end
-  end
-
   describe 'initialize' do 
     it 'sets the @beginning variable' do 
       beginning = [
-        "/\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\n", 
-        " \*                                                                                       \*\n", 
-        " \* CONTENTS                                                                        LINE  \*"
+        "/\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\n", 
+        " \*                                                                                      \*\n", 
+        " \* CONTENTS                                                                       LINE  \*"
         ].join
 
       expect(@toc.instance_values['beginning']).to eql beginning
@@ -25,8 +19,8 @@ describe TOC::TableOfContents do
 
     it 'sets the @ending variable' do 
       ending = [
-        " \*                                                                                       \*\n", 
-        "/\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*/\n"
+        " \*                                                                                      \*\n", 
+        "/\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*/\n"
         ].join
       expect(@toc.instance_values['ending']).to eql ending
     end
@@ -58,6 +52,31 @@ describe TOC::TableOfContents do
 
     it 'returns the appropriate line number' do 
       expect(@toc.first_after(2)).to be(5)
+    end
+  end
+
+  describe 'generate method' do 
+    before(:each) do 
+      @toc.filename = File.expand_path('../support/example1.js', __FILE__)
+      @table = File.readlines(File.expand_path('../support/table.txt', __FILE__)).join
+    end
+
+    it 'returns the table' do 
+      expect(@toc.generate).to eql @table
+    end
+  end
+
+  describe 'generate_content method' do 
+    it 'generates the content of the table' do 
+      content = File.readlines(File.expand_path('../support/example4.js', __FILE__)).join.chomp
+      output = @toc.generate_content([['Core Properties', 11], ['Special Properties', 16], ['Something Else There Isn\'t', 850]]).chomp
+      expect(output).to eql content
+    end
+  end
+
+  describe 'get_sections' do 
+    it 'identifies sections' do 
+      expect(@toc.get_sections).to eq([['Core Properties', 10], ['Special Properties', 16]])
     end
   end
 

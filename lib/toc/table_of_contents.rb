@@ -25,7 +25,7 @@ module TOC
     def create_line name, number
       beg    = " * #{name} "
       ending = " #{number}  *"
-      dots   = "." * (90 - (beg + ending).length)
+      dots   = "." * (89 - (beg + ending).length)
       beg + dots + ending
     end
 
@@ -54,6 +54,19 @@ module TOC
       end
     end
 
+
+    def generate
+      sections = get_sections
+      sections.each {|section| section[1] += (6 + sections.length)}
+      content = wrap_content(generate_content sections)
+      content
+    end
+
+    def generate_content(sections)
+      sections.map! {|section| create_line(section[0], section[1].to_s) }
+      sections = sections.join("\n") << "\n"
+    end
+
     # The +get_sections+ method looks for comments in the file associated
     # with the TOC::TableOfContents instance of the format recognized as a TOC 
     # section marker. It stores the headings in each of those comments in 
@@ -77,14 +90,13 @@ module TOC
       # Open the file and find the lines that are comments in the format
       # TOC is looking for.
 
-      File.open(filename, 'r+') do |file|
+      File.open(@filename, 'r+') do |file|
         file.each_line do |line|
           if line.match(/\s*\/\*\s+[a-z]+/i)
             sections << [line.match(/[a-z ]+[a-z]/i).to_s.strip, file.lineno]
           end
         end
       end
-
 
       sections.each {|val| val[1] = first_after(val[1]) }
 
@@ -131,7 +143,7 @@ module TOC
     end
 
     def wrap_content text
-      @beginning + "\n" + text + "\n" + @ending
+      @beginning + "\n" + text + @ending + "\n"
     end
 
     private
