@@ -1,11 +1,15 @@
 require 'fileutils'
 require File.expand_path('../formatter.rb', __FILE__)
 
-# The TOC Generator reads a JavaScript file looking for markers
-# demarcating key sections of the code that should be listed in the
-# table of contents. It takes a string as input.
-
 module TOC
+
+  # The TOC Generator reads a JavaScript file looking for markers
+  # demarcating key sections of the code that should be listed in the
+  # table of contents. It is initialized with the name of the file
+  # to which the table of contents will be added.
+  #
+  #     generator = TOC::Generator.new('/home/fred/dev/fredsProject.js')
+
   class Generator
     attr_accessor :filename
 
