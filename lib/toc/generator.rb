@@ -1,5 +1,5 @@
 require 'fileutils'
-require File.expand_path('../formatter.rb', __FILE__)
+require File.expand_path('../table_of_contents.rb', __FILE__)
 
 module TOC
 
@@ -35,7 +35,7 @@ module TOC
 
     def initialize(filename)
       @filename  = filename
-      @formatter = TOC::Formatter.new;
+      @formatter = TOC::TableOfContents.new;
     end
 
     def create_table
