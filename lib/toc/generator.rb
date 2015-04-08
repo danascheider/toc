@@ -11,22 +11,13 @@ module TOC
   #     generator = TOC::Generator.new('/home/fred/dev/fredsProject.js')
 
   class Generator
-
-    # The +filename+ method returns the filename associated with the
-    # generator (see above). 
-    # 
-    # The +filename=+ method sets the instance's +@filename+ variable 
-    # so the same generator can be used on multiple files.
-
-    attr_accessor :filename
-
     # Each generator object is intialized with a +filename+, which is the
     # name of the file to which the table of contents should be added.
     # This filename is assigned to the +@filename+ instance variable, 
     # which is readable and settable using the +filename+ accessor.
     #
     # The +initialize+ method creates a TOC::Formatter object and 
-    # stores it in the +@formatter+ instance variable. It then uses the
+    # stores it in the +@table+ instance variable. It then uses the
     # formatter to generate the table of contents according to the formatting
     # guidelines.
     #
@@ -35,20 +26,20 @@ module TOC
 
     def initialize(filename)
       @filename  = filename
-      @formatter = TOC::TableOfContents.new;
+      @toc       = TOC::TableOfContents.new(filename);
     end
 
     def create_table
-      sections = get_sections
+      sections = @toc.get_sections
       offset   = 6 + sections.length
 
       sections.map! do |section|
         section[1] += offset
-        @formatter.create_line section[0], section[1].to_s
+        @toc.create_line section[0], section[1].to_s
       end
 
       sections = sections.join("\n")
-      content = @formatter.wrap_content sections
+      content = @toc.wrap_content sections
     end
 
     def prepend_table
@@ -103,68 +94,6 @@ module TOC
       end
 
       return false
-    end
-
-    # The +first_after+ method takes a line number as argument +lineno+. Finding that line
-    # in the file corresponding to the generator's +filename+, it identifies the first
-    # line after that containing actual code. If given +lineno+ contains actual
-    # code, that number is returned. For example, given this file:
-    #
-    #    1|   // This line is a comment
-    #    2|   // This line is also a comment
-    #    3|   
-    #    4|   var foo = 'bar',  // define the foo variable
-    #    5|       baz = 'qux'
-    #
-    #    generator.first_after(1)       # => 4
-    #    generator.first_after(4)       # => 4
-
-    def first_after(lineno)
-      arr   = File.readlines(@filename)
-
-      arr.each_index do |index|
-        if arr[index].match(/^\s*\w+/) && index >= lineno 
-          return index + 1
-          break
-        end
-      end
-    end
-
-    # The +get_sections+ method looks for comments in the file associated
-    # with the TOC::Generator instance of the format recognized as a TOC 
-    # section marker. It stores the headings in each of those comments in 
-    # the +sections+ array, along with the line number of the comment.
-    # Finally, it replaces those line numbers with the line number of the
-    # actual code following the comment.
-    #
-    # Comments that are recognized as section headers take this basic form:
-    #
-    #     /* Some Arbitrary Text
-    #     /***********************************************************/
-    #
-    # Both of these lines can contain any quantity of whitespace before or
-    # after the text or comment markers. The text can contain any characters
-    # except newlines. On the second line, there must be at least 20 *
-    # characters.
-
-    def get_sections
-      sections = []
-
-      # Open the file and find the lines that are comments in the format
-      # TOC is looking for.
-
-      File.open(filename, 'r+') do |file|
-        file.each_line do |line|
-          if line.match(/\s*\/\*\s+[a-z]+/i)
-            sections << [line.match(/[a-z ]+[a-z]/i).to_s.strip, file.lineno]
-          end
-        end
-      end
-
-
-      sections.each {|val| val[1] = first_after(val[1]) }
-
-      sections
     end
   end
 end

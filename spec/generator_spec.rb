@@ -6,10 +6,6 @@ describe 'TOC::Generator' do
     @output    = File.read(File.expand_path('../support/example1-after.js', __FILE__ ))
   end
 
-  it 'identifies sections' do 
-    expect(@generator.get_sections).to eq([['Core Properties', 10], ['Special Properties', 16]])
-  end
-
   describe 'create_table method' do 
     before(:each) do 
       @table = File.read(File.expand_path('../support/table.txt', __FILE__))
@@ -17,20 +13,6 @@ describe 'TOC::Generator' do
 
     it 'returns the table' do 
       expect(@generator.create_table).to eql @table
-    end
-  end
-
-  describe 'first_after method' do
-    before(:each) do 
-      @generator = TOC::Generator.new(File.expand_path('../support/example2.txt', __FILE__))
-    end
-
-    it 'returns a numeric' do 
-      expect(@generator.first_after(2)).to be_a(Numeric)
-    end
-
-    it 'returns the appropriate line number' do 
-      expect(@generator.first_after(2)).to be(5)
     end
   end
 
