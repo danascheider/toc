@@ -130,10 +130,25 @@ module TOC
       end
     end
 
+    # The +get_sections+ method looks for comments in the file associated
+    # with the TOC::Generator instance of the format recognized as a TOC 
+    # section marker. It stores the headings in each of those comments in 
+    # the +sections+ array, along with the line number of the comment.
+    # Finally, it replaces those line numbers with the line number of the
+    # actual code following the comment.
+    #
+    # Comments that are recognized as section headers take this basic form:
+    #
+    #     /* Some Arbitrary Text
+    #     /***********************************************************/
+    #
+    # Both of these lines can contain any quantity of whitespace before or
+    # after the text or comment markers. The text can contain any characters
+    # except newlines. On the second line, there must be at least 20 *
+    # characters.
+
     def get_sections
       sections = []
-      line_nos = []
-      comment_lines = []
 
       # Open the file and find the lines that are comments in the format
       # TOC is looking for.
