@@ -11,6 +11,12 @@ module TOC
   #     generator = TOC::Generator.new('/home/fred/dev/fredsProject.js')
 
   class Generator
+
+    # The +filename+ method returns the filename associated with the
+    # generator (see above). The +filename=+ method sets the instance's
+    # +@filename+ variable so the same generator can be used on multiple
+    # files.
+    
     attr_accessor :filename
 
     def initialize(filename)
