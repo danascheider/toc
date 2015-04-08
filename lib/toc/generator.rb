@@ -29,6 +29,9 @@ module TOC
     # stores it in the +@formatter+ instance variable. It then uses the
     # formatter to generate the table of contents according to the formatting
     # guidelines.
+    #
+    #     generator = TOC::Generator.new(File.expand_path('./lib/myfile.js', __FILE__))
+    #     generator.filename            # => '/home/fred/myproject/lib/myfile.js'
 
     def initialize(filename)
       @filename  = filename
