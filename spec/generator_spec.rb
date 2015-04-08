@@ -60,6 +60,11 @@ describe 'TOC::Generator' do
         line = 'and this is the end of the same comment */'
         expect(@generator.no_content? line).to be true
       end
+
+      it 'returns true for a single-line comment using the multi-line syntax' do 
+        line = "  /* This is a full-line comment with multi-line syntax */\t"
+        expect(@generator.no_content? line).to be true
+      end
     end
 
     context 'lines partially consisting of comments' do 
@@ -84,8 +89,4 @@ describe 'TOC::Generator' do
       end
     end
   end
-
-  # it 'adds a table of contents' do 
-  #   expect(TOC.add_table).to eq(@output)
-  # end
 end
