@@ -13,11 +13,22 @@ module TOC
   class Generator
 
     # The +filename+ method returns the filename associated with the
-    # generator (see above). The +filename=+ method sets the instance's
-    # +@filename+ variable so the same generator can be used on multiple
-    # files.
-    
+    # generator (see above). 
+    # 
+    # The +filename=+ method sets the instance's +@filename+ variable 
+    # so the same generator can be used on multiple files.
+
     attr_accessor :filename
+
+    # Each generator object is intialized with a +filename+, which is the
+    # name of the file to which the table of contents should be added.
+    # This filename is assigned to the +@filename+ instance variable, 
+    # which is readable and settable using the +filename+ accessor.
+    #
+    # The +initialize+ method creates a TOC::Formatter object and 
+    # stores it in the +@formatter+ instance variable. It then uses the
+    # formatter to generate the table of contents according to the formatting
+    # guidelines.
 
     def initialize(filename)
       @filename  = filename
