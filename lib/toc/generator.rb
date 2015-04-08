@@ -46,13 +46,26 @@ module TOC
       FileUtils.mv(new_filename, @filename)
     end
 
-    def no_content? (line)
+    # The +#no_content?+ analyzes the given +line+ to check whether it is an actual 
+    # line of code or a comment. The +#no_content?+ method returns +true+ under the
+    # following circumstances:
+    #   1. The line begins with either +//+ or with whitespace followed immediately
+    #      by +//+ (i.e., it is a single-line comment)
+    #   2. The line begins with either +/*+ or with whitespace followed immediately
+    #      by +/*+ and contains either no +*/+ ending or no text after any +*/+ (i.e.,
+    #      it is the beginning of a multi-line comment or is a single-line comment that
+    #      uses the multi-line syntax)
+    #   3. The line ends with +*/+ and either contains no +/*+ opener or the +/*+ are the
+    #      first non-whitespace characters on the line (i.e., it is the end of a multi-
+    #      line comment or consists solely of a single-line comment that uses the multi-
+    #      line syntax)
+    #   4. The line consists of whitespace only
+    #
+    # The +#no_content?+ method returns +false+ if the line contains code or if it is
+    # part of a multi-line comment but has no comment delineators itself. This will be
+    # changed in future versions but was not an MVP feature. 
 
-      # There is still one edge case we need to deal with: that of a multi-line comment
-      # that only has the /* */ at the beginning and end. In such a case, there could be
-      # one or more full lines of comment that have no such indicators. For now I will 
-      # treat that as an edge case.
-
+    def no_content? line
       # match lines starting with //
       slash_matcher          = /^\s*(\/\/)/
 
