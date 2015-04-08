@@ -91,6 +91,45 @@ module TOC
       sections
     end
 
+    # The +#no_content?+ analyzes the given +line+ to check whether it is an actual 
+    # line of code or a comment. The +#no_content?+ method returns +true+ under the
+    # following circumstances:
+    #   1. The line begins with either +//+ or with whitespace followed immediately
+    #      by +//+ (i.e., it is a single-line comment)
+    #   2. The line begins with either +/*+ or with whitespace followed immediately
+    #      by +/*+ and contains either no +*/+ ending or no text after any +*/+ (i.e.,
+    #      it is the beginning of a multi-line comment or is a single-line comment that
+    #      uses the multi-line syntax)
+    #   3. The line ends with +*/+ and either contains no +/*+ opener or the +/*+ are the
+    #      first non-whitespace characters on the line (i.e., it is the end of a multi-
+    #      line comment or consists solely of a single-line comment that uses the multi-
+    #      line syntax)
+    #   4. The line consists of whitespace only
+    #
+    # The +#no_content?+ method returns +false+ if the line contains code or if it is
+    # part of a multi-line comment but has no comment delineators itself. This will be
+    # changed in future versions but was not an MVP feature. 
+
+    def no_content? line
+      # match lines starting with //
+      slash_matcher          = /^\s*(\/\/)/
+
+      # match lines starting with /* and not containing a */ elsewhere in the line
+      multi_line_matcher     = /^\s*((\/)?\*)(.*)[^(\*\/)]$/
+
+      # match lines consisting of only the end of a /* */ comment 
+      multi_line_end_matcher = /^(.*)\*\/(\s*)$/
+
+      # match lines that consist of white space only
+      space_matcher          = /^\s*$/
+
+      [slash_matcher, multi_line_matcher, multi_line_end_matcher, space_matcher].each do |regex|
+        return true if line =~ regex
+      end
+
+      return false
+    end
+
     def wrap_content text
       @beginning + "\n" + text + "\n" + @ending
     end

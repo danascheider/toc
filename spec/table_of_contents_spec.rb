@@ -60,4 +60,60 @@ describe TOC::TableOfContents do
       expect(@toc.first_after(2)).to be(5)
     end
   end
+
+  describe 'no_content? method' do 
+    it 'returns true for a line consisting of whitespace' do
+      line = '      '
+      expect(@toc.no_content? line).to be true
+    end
+
+    it 'returns false for a line consisting of code' do
+      line = '  var foo = "bar";'
+      expect(@toc.no_content? line).to be false
+    end
+
+    context 'lines consisting of comments' do
+      it 'returns true for the // comment style' do
+        line = '// this line is only a comment'
+        expect(@toc.no_content? line).to be true
+      end
+
+      it 'returns true for the /* comment style' do 
+        line = '  /* This is the beginning of a multi-line comment'
+        expect(@toc.no_content? line).to be true
+      end
+
+      it 'returns true for the end of a multi-line comment' do 
+        line = 'and this is the end of the same comment */'
+        expect(@toc.no_content? line).to be true
+      end
+
+      it 'returns true for a single-line comment using the multi-line syntax' do 
+        line = "  /* This is a full-line comment with multi-line syntax */\t"
+        expect(@toc.no_content? line).to be true
+      end
+    end
+
+    context 'lines partially consisting of comments' do 
+      it 'returns false for lines containing a // comment' do 
+        line = 'var foo = "bar";  // define foo'
+        expect(@toc.no_content? line).to be false
+      end
+
+      it 'returns false for lines ending with part of a /* comment' do 
+        line = 'var foo = bar; /* this is a comment'
+        expect(@toc.no_content? line).to be false
+      end
+
+      it 'returns false for lines beginning with part of a /* comment' do
+        line = 'this is the end of a comment */ var foo = bar;'
+        expect(@toc.no_content? line).to be false
+      end
+
+      it 'returns false for lines containing a full /* */ comment' do 
+        line = 'var foo = /* this is a comment */ bar'
+        expect(@toc.no_content? line).to be false
+      end
+    end
+  end
 end
