@@ -102,6 +102,20 @@ module TOC
       return false
     end
 
+    # The +first_after+ method takes a line number as argument +lineno+. Finding that line
+    # in the file corresponding to the generator's +filename+, it identifies the first
+    # line after that containing actual code. If given +lineno+ contains actual
+    # code, that number is returned. For example, given this file:
+    #
+    #    1|   // This line is a comment
+    #    2|   // This line is also a comment
+    #    3|   
+    #    4|   var foo = 'bar',  // define the foo variable
+    #    5|       baz = 'qux'
+    #
+    #    generator.first_after(1)       # => 4
+    #    generator.first_after(4)       # => 4
+
     def first_after(lineno)
       arr   = File.readlines(@filename)
 
